@@ -11,8 +11,8 @@ public class Position extends PointF {
     //Item所对应的索引
     public int index;
 
-    //view半径
-    private static float mRectLength;
+    //view直径
+    private static float M_RECT_LENGTH;
 
     public Position(int index, float x, float y) {
         this(index,x,y,ScaleRatio.getPositionScale(x,y));
@@ -22,16 +22,18 @@ public class Position extends PointF {
         super(x,y);
         this.index = index;
         this.fraction = fraction;
-        this.setmRectLength(0f);
+        this.setmRectLength(100f);
     }
 
     public void setmRectLength(float mRectLength) {
-        this.mRectLength = mRectLength/2;
+        this.M_RECT_LENGTH = mRectLength/2;
     }
 
     @Override
     public boolean equals(Object obj) {
-        return obj != null && obj instanceof Position ? (getDistance(this,(Position) obj)<mRectLength) : this == obj;
+        double distance = getDistance(this,(Position) obj);
+        float standard = M_RECT_LENGTH/2;
+        return obj != null && obj instanceof Position ? (distance<standard) : this == obj;
     }
 
     private double getDistance(Position p1, Position p2){
@@ -46,5 +48,15 @@ public class Position extends PointF {
     @Override
     public int hashCode() {
         return ((Integer)((int)Math.floor(this.x))).hashCode()+((Integer)((int)Math.floor(this.y))).hashCode();
+    }
+
+    @Override
+    public String toString() {
+        return "Position{" +
+                "fraction=" + fraction +
+                ", index=" + index +
+                ", x=" + x +
+                ", y=" + y +
+                '}';
     }
 }

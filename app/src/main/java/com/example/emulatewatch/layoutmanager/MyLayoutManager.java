@@ -21,10 +21,10 @@ import java.util.Set;
 
 public class MyLayoutManager extends RecyclerView.LayoutManager {
 
-    private static final int VISIBLE_WIDTH = 600;
-    private static final int VISIBLE_WEIGHT = 700;
+    private static final int VISIBLE_WIDTH = 380;
+    private static final int VISIBLE_HEIGHT = 440;
     private static final int MAX_ITEM_IN_SCREEN = 27;
-    private static final Position centerPoint = new Position(0,300f,350f,1f);
+    private static final Position centerPoint = new Position(0,VISIBLE_WIDTH/2,VISIBLE_HEIGHT/2,1f);
 
     private RecyclerView.Recycler mRecycler;
     private static float mRectLength;
@@ -48,7 +48,7 @@ public class MyLayoutManager extends RecyclerView.LayoutManager {
     @Override
     public void onMeasure(RecyclerView.Recycler recycler, RecyclerView.State state, int widthSpec, int heightSpec) {
         widthSpec = View.MeasureSpec.makeMeasureSpec(VISIBLE_WIDTH, View.MeasureSpec.EXACTLY);
-        heightSpec = View.MeasureSpec.makeMeasureSpec(VISIBLE_WEIGHT, View.MeasureSpec.EXACTLY);
+        heightSpec = View.MeasureSpec.makeMeasureSpec(VISIBLE_HEIGHT, View.MeasureSpec.EXACTLY);
 
         super.onMeasure(recycler, state, widthSpec, heightSpec);
     }
@@ -80,19 +80,9 @@ public class MyLayoutManager extends RecyclerView.LayoutManager {
     private void onLayout(RecyclerView.Recycler recycler, List<Position> needLayoutItems) {
         int x, y;
         View item;
-        int i=0;
 
-//        item = recycler.getViewForPosition(needLayoutItems.get(0).index);
-//        addView(item);
-//        measureChild(item, 0, 0);
-//
-//        //计算左和上边界
-//        x = (int) needLayoutItems.get(0).x - getDecoratedMeasuredWidth(item) / 2;
-//        y = (int) needLayoutItems.get(0).y - getDecoratedMeasuredHeight(item) / 2;
-//
-//        Log.d("X",""+i++);
-//        layoutDecorated(item, x, y, x + getDecoratedMeasuredWidth(item), y + getDecoratedMeasuredHeight(item));
-        for (Position tmp : needLayoutItems) {
+        for (int i=0; i<needLayoutItems.size();i++) {
+            Position tmp = needLayoutItems.get(i);
             item = recycler.getViewForPosition(tmp.index);
             addView(item);
             measureChild(item, 0, 0);
@@ -101,7 +91,7 @@ public class MyLayoutManager extends RecyclerView.LayoutManager {
             x = (int) tmp.x - getDecoratedMeasuredWidth(item) / 2;
             y = (int) tmp.y - getDecoratedMeasuredHeight(item) / 2;
 
-            Log.d("X",""+i++);
+//            Log.d("X",""+i++);
             layoutDecorated(item, x, y, x + getDecoratedMeasuredWidth(item), y + getDecoratedMeasuredHeight(item));
 
             float scale = tmp.fraction;
@@ -127,14 +117,14 @@ public class MyLayoutManager extends RecyclerView.LayoutManager {
         measureChild(item, 0, 0);
         mRectLength = getDecoratedMeasuredWidth(item);
 
-        float polygonLength = 2*mRectLength/(float) Math.sqrt(3);
+        float polygonLength = mRectLength/(float) Math.sqrt(3);
         float[][] direction = new float[][]{
                 {-2*polygonLength,0},
                 {2*polygonLength,0},
-                {-polygonLength,2*mRectLength},
-                {polygonLength,2*mRectLength},
-                {-polygonLength,-2*mRectLength},
-                {polygonLength,-2*mRectLength}
+                {-polygonLength,mRectLength},
+                {polygonLength,-mRectLength},
+                {-polygonLength,-mRectLength},
+                {polygonLength,mRectLength}
         };
         Queue<Position> queue = new ArrayDeque<>();
         Set<Position> dedup = new HashSet<>();
@@ -172,7 +162,7 @@ public class MyLayoutManager extends RecyclerView.LayoutManager {
         for(Position tmp: layoutList){
             float xNow = tmp.x-offset[0];
             float yNow = tmp.y-offset[1];
-            if(Math.abs(xNow-centerPoint.x)<300 && Math.abs(yNow-centerPoint.y)<350){
+            if(Math.abs(xNow-centerPoint.x)<VISIBLE_WIDTH/2 && Math.abs(yNow-centerPoint.y)<VISIBLE_HEIGHT/2){
                 result.add(tmp);
             }
         }

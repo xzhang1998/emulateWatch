@@ -21,7 +21,7 @@ import java.util.Set;
 
 public class MyLayoutManager extends RecyclerView.LayoutManager {
 
-    private static final int VISIBLE_WIDTH = 380;
+    private static final int VISIBLE_WIDTH = 420;
     private static final int VISIBLE_HEIGHT = 440;
     private static final int MAX_ITEM_IN_SCREEN = 27;
     private static final Position centerPoint = new Position(0,VISIBLE_WIDTH/2,VISIBLE_HEIGHT/2,1f);
@@ -30,7 +30,7 @@ public class MyLayoutManager extends RecyclerView.LayoutManager {
     private static float mRectLength;
     private static Position[] layoutList;
 
-    private float mOffsetX, mOffsetY;
+    private int mOffsetX, mOffsetY;
 
 
     public MyLayoutManager() {
@@ -88,12 +88,13 @@ public class MyLayoutManager extends RecyclerView.LayoutManager {
             measureChild(item, 0, 0);
 
             //计算左和上边界
-            x = (int) tmp.x - getDecoratedMeasuredWidth(item) / 2;
-            y = (int) tmp.y - getDecoratedMeasuredHeight(item) / 2;
+            x = (int) tmp.x - mOffsetX - getDecoratedMeasuredWidth(item) / 2;
+            y = (int) tmp.y - mOffsetY - getDecoratedMeasuredHeight(item) / 2;
 
-//            Log.d("X",""+i++);
+//            Log.d("Offset","x:"+mOffsetX+"y:"+mOffsetY);
             layoutDecorated(item, x, y, x + getDecoratedMeasuredWidth(item), y + getDecoratedMeasuredHeight(item));
 
+//            Log.d("position","left: "+mOffsetX+"bottom: "+mOffsetY+"right: "+mOffsetX+"bottom: "+mOffsetY);
             float scale = tmp.fraction;
             item.setScaleX(scale);
             item.setScaleY(scale);
@@ -115,16 +116,16 @@ public class MyLayoutManager extends RecyclerView.LayoutManager {
 
         View item = mRecycler.getViewForPosition(0);
         measureChild(item, 0, 0);
-        mRectLength = getDecoratedMeasuredWidth(item);
+        mRectLength = getDecoratedMeasuredWidth(item); //直径
 
         float polygonLength = mRectLength/(float) Math.sqrt(3);
         float[][] direction = new float[][]{
-                {-2*polygonLength,0},
-                {2*polygonLength,0},
-                {-polygonLength,mRectLength},
-                {polygonLength,-mRectLength},
-                {-polygonLength,-mRectLength},
-                {polygonLength,mRectLength}
+                {-polygonLength,mRectLength},//左下
+                {-polygonLength,-mRectLength}, //左上
+                {polygonLength,-mRectLength}, //右上
+                {polygonLength,mRectLength}, //右下
+                {-2*polygonLength,0}, //左
+                {2*polygonLength,0}, //右
         };
         Queue<Position> queue = new ArrayDeque<>();
         Set<Position> dedup = new HashSet<>();
@@ -158,21 +159,37 @@ public class MyLayoutManager extends RecyclerView.LayoutManager {
     //generate屏幕上需要显示的item
     private void initNeedLayoutItems(List<Position> result) {
         //配合scroll offset 遍历position[]，拿到本次会显示在屏幕上的部分
-        float[] offset = getScrollOffset();
         for(Position tmp: layoutList){
-            float xNow = tmp.x-offset[0];
-            float yNow = tmp.y-offset[1];
+            float xNow = tmp.x-mOffsetX;
+            float yNow = tmp.y-mOffsetY;
             if(Math.abs(xNow-centerPoint.x)<VISIBLE_WIDTH/2 && Math.abs(yNow-centerPoint.y)<VISIBLE_HEIGHT/2){
                 result.add(tmp);
             }
         }
     }
 
-    private float[] getScrollOffset() {
-        float[] res = new float[2];
-        res[0] = mOffsetX;
-        res[1] = mOffsetY;
-        return res;
+    @Override
+    public boolean canScrollHorizontally() {
+        return true;
+    }
+
+    @Override
+    public int scrollHorizontallyBy(int dx, RecyclerView.Recycler recycler, RecyclerView.State state) {
+        mOffsetX+=dx;
+        relayoutChildren(recycler, state);
+        return dx;
+    }
+
+    @Override
+    public boolean canScrollVertically() {
+        return true;
+    }
+
+    @Override
+    public int scrollVerticallyBy(int dy, RecyclerView.Recycler recycler, RecyclerView.State state) {
+        mOffsetY+=dy;
+        relayoutChildren(recycler, state);
+        return dy;
     }
 
 

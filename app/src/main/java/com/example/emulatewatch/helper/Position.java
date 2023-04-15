@@ -32,7 +32,7 @@ public class Position extends PointF {
     @Override
     public boolean equals(Object obj) {
         double distance = getDistance(this,(Position) obj);
-        float standard = M_RECT_LENGTH/2;
+        float standard = M_RECT_LENGTH;
         return obj != null && obj instanceof Position ? (distance<standard) : this == obj;
     }
 
@@ -47,7 +47,7 @@ public class Position extends PointF {
 
     @Override
     public int hashCode() {
-        return ((Integer)((int)Math.floor(this.x))).hashCode()+((Integer)((int)Math.floor(this.y))).hashCode();
+        return ((Integer)((int)Math.round(this.x))).hashCode()+((Integer)((int)Math.round(this.y))).hashCode();
     }
 
     @Override

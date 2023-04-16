@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.LinearSnapHelper;
+import androidx.recyclerview.widget.PagerSnapHelper;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.SnapHelper;
 
@@ -36,8 +37,8 @@ public class MainActivity extends AppCompatActivity {
 
         imageRecView.setAdapter(myAdapter);
 
-        SnapHelper linearSnapHelper = new LinearSnapHelper();
-        linearSnapHelper.attachToRecyclerView(imageRecView);
+        SnapHelper pagerSnapHelper = new PagerSnapHelper();
+        pagerSnapHelper.attachToRecyclerView(imageRecView);
     }
 
     private List<Applications> getData(){
@@ -60,13 +61,13 @@ public class MainActivity extends AppCompatActivity {
         imageList.add(new Applications("Zoom", "https://w7.pngwing.com/pngs/339/623/png-transparent-zoom-app-hd-logo.png"));
         imageList.add(new Applications("SnapSeed", "https://cdn-icons-png.flaticon.com/512/356/356017.png"));
         imageList.add(new Applications("Grammarly", "https://assets.stickpng.com/images/5f49294168ecc70004ae7094.png"));
-        imageList.add(new Applications("Airbnb", "https://cdn.freebiesupply.com/images/large/2x/airbnb-logo.png"));
+        imageList.add(new Applications("Notion", "https://assets.stickpng.com/images/62cc1585150d5de9a3dad5eb.png"));
         imageList.add(new Applications("Google Maps", "https://cdn-icons-png.flaticon.com/512/355/355980.png"));
         imageList.add(new Applications("Canvas","https://upload.wikimedia.org/wikipedia/commons/thumb/0/08/Canva_icon_2021.svg/2048px-Canva_icon_2021.svg.png"));
 
         //18
         imageList.add(new Applications("Slack", "https://www.itprotoday.com/sites/itprotoday.com/files/appIcon_desktop.png"));
-        imageList.add(new Applications("Notion", "https://assets.stickpng.com/images/62cc1585150d5de9a3dad5eb.png"));
+
 
         return imageList;
     }

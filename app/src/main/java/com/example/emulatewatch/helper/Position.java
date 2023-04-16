@@ -5,23 +5,28 @@ import android.graphics.PointF;
 import java.util.Objects;
 
 public class Position extends PointF {
-    //缩放大小
-    public float fraction;
+
+    //view直径
+    private static float M_RECT_LENGTH;
+//    public static float[] distScale;
 
     //Item所对应的索引
     public int index;
 
-    //view直径
-    private static float M_RECT_LENGTH;
+//    //被expand时的层数
+//    public int level;
+//
+//    //没调整距离前的坐标
+//    private float xParent;
+//    private float yParent;
 
-    public Position(int index, float x, float y) {
-        this(index,x,y,ScaleRatio.getPositionScale(x,y));
-    }
 
-    public Position(int index, float x, float y, float fraction) {
+    public Position(int index, float x, float y) { //float x1, float y1, int level
         super(x,y);
         this.index = index;
-        this.fraction = fraction;
+//        this.level = level;
+//        this.xParent=x1;
+//        this.yParent=y1;
         this.setmRectLength(100f);
     }
 
@@ -47,16 +52,19 @@ public class Position extends PointF {
 
     @Override
     public int hashCode() {
-        return ((Integer)((int)Math.round(this.x))).hashCode()+((Integer)((int)Math.round(this.y))).hashCode();
+//        float xCompare = (x-xParent)/distScale[this.level]+xParent;
+//        float yCompare = (y-yParent)/distScale[this.level]+yParent;
+        return ((Integer) ((int)Math.round(x))).hashCode()
+                +((Integer)((int)Math.round(y))).hashCode();
     }
 
     @Override
     public String toString() {
         return "Position{" +
-                "fraction=" + fraction +
-                ", index=" + index +
+                "index=" + index +
                 ", x=" + x +
                 ", y=" + y +
+//                ", distScale=" + distScale[level] +
                 '}';
     }
 }

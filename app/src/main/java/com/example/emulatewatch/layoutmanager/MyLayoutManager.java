@@ -1,16 +1,8 @@
 package com.example.emulatewatch.layoutmanager;
 
-import android.content.Context;
-import android.graphics.Point;
-import android.util.Log;
-import android.util.TypedValue;
 import android.view.View;
-
-import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
 import com.example.emulatewatch.helper.Position;
-import com.example.emulatewatch.helper.ScaleRatio;
 
 import java.util.ArrayDeque;
 import java.util.ArrayList;
@@ -23,18 +15,18 @@ public class MyLayoutManager extends RecyclerView.LayoutManager {
 
     private static final int VISIBLE_WIDTH = 420;
     private static final int VISIBLE_HEIGHT = 440;
-    private static final int MAX_ITEM_IN_SCREEN = 27;
-    private static final Position centerPoint = new Position(0,VISIBLE_WIDTH/2,VISIBLE_HEIGHT/2,1f);
+    private static final int GAP = 27;
+    private static final Position centerPoint = new Position(0,VISIBLE_WIDTH/2,VISIBLE_HEIGHT/2);
+//    private static final float[] distScale = new float[]{1f,1f,0.9f,0.94f};
 
     private RecyclerView.Recycler mRecycler;
     private static float mRectLength;
     private static Position[] layoutList;
-
     private int mOffsetX, mOffsetY;
 
 
     public MyLayoutManager() {
-
+//        Position.distScale = this.distScale;
     }
 
     @Override
@@ -57,7 +49,6 @@ public class MyLayoutManager extends RecyclerView.LayoutManager {
     public boolean isAutoMeasureEnabled() {
         return false;
     }
-
 
 
     @Override
@@ -105,8 +96,8 @@ public class MyLayoutManager extends RecyclerView.LayoutManager {
 
             layoutDecorated(item, left, top, right, bottom);
 
-            //set scale
-            float scale = getScale(tmp.x - mOffsetX,tmp.y - mOffsetY);
+//            set scale
+            float scale = getScale(tmp.x-mOffsetX,tmp.y-mOffsetY);
             item.setScaleX(scale);
             item.setScaleY(scale);
 
@@ -146,7 +137,7 @@ public class MyLayoutManager extends RecyclerView.LayoutManager {
         measureChild(item, 0, 0);
         mRectLength = getDecoratedMeasuredWidth(item); //直径
 
-        float polygonLength = mRectLength/((float) Math.sqrt(3)+0.2f);
+        float polygonLength = mRectLength/((float) Math.sqrt(3)+0.2f); //+0.2 调整距离
         float[][] direction = new float[][]{
                 {-polygonLength,mRectLength},//左下
                 {-polygonLength,-mRectLength}, //左上
@@ -158,29 +149,37 @@ public class MyLayoutManager extends RecyclerView.LayoutManager {
         Queue<Position> queue = new ArrayDeque<>();
         Set<Position> dedup = new HashSet<>();
         queue.offer(centerPoint);
+//        int level = 0;
         int size = 1;
         while (!queue.isEmpty()){
-            Position now = queue.poll();
-            float xNow = now.x;
-            float yNow = now.y;
-            this.layoutList[now.index] = now;
-            dedup.add(now);
-            //六个方向expand，同时去重
-            for(float[] dir: direction){
-                float xNew = xNow+dir[0];
-                float yNew = yNow+dir[1];
+//            level+=1;
+//            int loopTime = queue.size();
+//            while(loopTime>0){
+                Position now = queue.poll();
+                float xNow = now.x;
+                float yNow = now.y;
+                this.layoutList[now.index] = now;
+                dedup.add(now);
+                //六个方向expand，同时去重
+                for(float[] dir: direction){
+                    float xNew = xNow+dir[0];
+//                            *distScale[level];
+                    float yNew = yNow+dir[1];
+//                            *distScale[level];
 
-                if(size==itemCount){
-                    break;
-                }
+                    if(size==itemCount){
+                        break;
+                    }
 
-                Position candidate = new Position(size,xNew,yNew);
-                if(!dedup.contains(candidate)){
-                    queue.offer(candidate);
-                    dedup.add(candidate);
-                    size++;
+                    Position candidate = new Position(size,xNew,yNew);
+                    if(!dedup.contains(candidate)){
+                        queue.offer(candidate);
+                        dedup.add(candidate);
+                        size++;
+                    }
                 }
-            }
+//                loopTime--;
+//            }
         }
     }
 

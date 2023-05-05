@@ -1,6 +1,6 @@
 package com.example.emulatewatch.helper;
 
-public class ScaleRatio {
+public class ScaleRatio { //not used
     private static final float MAX = 1f;
     private static final float SECOND = 0.8f;
     private static final float MIN = 0.2f;

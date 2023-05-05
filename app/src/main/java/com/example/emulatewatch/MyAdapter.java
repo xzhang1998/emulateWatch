@@ -35,7 +35,6 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder>{
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-//        holder.rounded_image_view
         holder.parent.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -43,9 +42,6 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder>{
             }
         });
 
-//        System.out.println(imageList.get(position).getImageUrl());
-//
-//        holder.rounded_image_view.startAnimation(animation);
         Glide.with(context)
                 .load(imageList.get(position).getImageUrl())
                 .into(holder.rounded_image_view);

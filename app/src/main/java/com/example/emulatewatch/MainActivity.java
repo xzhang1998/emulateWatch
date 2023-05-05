@@ -29,14 +29,16 @@ public class MainActivity extends AppCompatActivity {
 
         imageRecView = findViewById(R.id.imageRecView);
 
-        final RecyclerView.LayoutManager layoutManager = new MyLayoutManager();
+        // 配置layoutManager
+        final RecyclerView.LayoutManager layoutManager = new MyLayoutManager(420,440);
         imageRecView.setLayoutManager(layoutManager);
 
+        //配置Adapter，传入数据
         MyAdapter myAdapter = new MyAdapter(this);
         myAdapter.setImageList(getData());
-
         imageRecView.setAdapter(myAdapter);
 
+        //设置自适应归位效果
         SnapHelper pagerSnapHelper = new PagerSnapHelper();
         pagerSnapHelper.attachToRecyclerView(imageRecView);
     }
@@ -51,8 +53,6 @@ public class MainActivity extends AppCompatActivity {
         imageList.add(new Applications("YouTube", "https://image.pngaaa.com/129/75129-middle.png"));
         imageList.add(new Applications("LinkedIn", "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTFBTEEbtxIHqbiVCJbwCisOpm3mAaDhG5fb-pZ-ULLOg&s"));
         imageList.add(new Applications("TikTok", "https://www.toymakr3d.com/shop/images/logo/tiktok.png"));
-
-        //7
         imageList.add(new Applications("Snapchat", "https://toppng.com/uploads/preview/snapchat-logo-icon-png-snapchat-logo-circle-11562922134qgu9m89jgh.png"));
         imageList.add(new Applications("Uber", "https://cdn3.iconfinder.com/data/icons/popular-services-brands-vol-2/512/uber-512.png"));
         imageList.add(new Applications("Netflix", "https://www.citypng.com/public/uploads/preview/-11594682698soxrlignre.png"));
@@ -64,10 +64,7 @@ public class MainActivity extends AppCompatActivity {
         imageList.add(new Applications("Notion", "https://assets.stickpng.com/images/62cc1585150d5de9a3dad5eb.png"));
         imageList.add(new Applications("Google Maps", "https://cdn-icons-png.flaticon.com/512/355/355980.png"));
         imageList.add(new Applications("Canvas","https://upload.wikimedia.org/wikipedia/commons/thumb/0/08/Canva_icon_2021.svg/2048px-Canva_icon_2021.svg.png"));
-
-        //18
         imageList.add(new Applications("Slack", "https://www.itprotoday.com/sites/itprotoday.com/files/appIcon_desktop.png"));
-
 
         return imageList;
     }

@@ -39,7 +39,7 @@ https://user-images.githubusercontent.com/89569765/232271299-6c2977a0-01b5-43eb-
 
 ### 4⃣️ Technical Challenges
 1. Designing the hexagonal layout: <br>
-Need to calculate the horizontal and vertical coordinate relationships from the center of the hexagon to its six vertices, and then expand in six directions from the center using the BFS algorithm. <br>
+1) Need to calculate the horizontal and vertical coordinate relationships from the center of the hexagon to its six vertices, and then expand in six directions from the center using the BFS algorithm. <br>
 2）Deduplication is very important for BFS. Need to overwrite the .equals() of class Position to deduplication in Set <br>
 3）overwrite .equals(): Due to the involvement of numerous floating-point calculations during the hexagon expansion process, there may be discrepancies in precision. Therefore, in the deduplication process, as long as the distance between the element currently being checked and the elements in its corresponding set does not exceed the item's diameter, it is considered a duplicate. <br>
 4）overwrite .hashcode(): Because of the precision issues, to ensure that items at the same position generate the same hashcode and then use the .equals() to do the comparison, take the rounded values of x and y, and then add their respective hashcodes together. <br>
